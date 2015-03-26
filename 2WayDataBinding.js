@@ -12,11 +12,13 @@ var $scope = {};
     var attachEvent = function (classNames) {
         classNames.forEach(function (className) {
             var elements = document.getElementsByClassName(className);
+            var value;
             for (var index in elements) {
                 elements[index].onkeyup = function () {
                     for (var index in elements) {
                         elements[index].value = this.value;
                     }
+                    value = this.value;
                 }
             }
             Object.defineProperty($scope, className, {
@@ -24,6 +26,10 @@ var $scope = {};
                     for (var index in elements) {
                         elements[index].value = newValue;
                     }
+                    value = newValue;
+                },
+                get: function() {
+                    return value;
                 }
             });
 
