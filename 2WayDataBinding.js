@@ -14,17 +14,32 @@ var $scope = {};
             var elements = document.getElementsByClassName(className);
             var value;
             for (var index in elements) {
-                elements[index].onkeyup = function () {
-                    for (var index in elements) {
-                        elements[index].value = this.value;
+                if(elements.hasOwnProperty(index)) {
+                    if(elements[index].tagName == "INPUT") {
+                        elements[index].onkeyup = function () {
+                            for (var index in elements) {
+                                if(elements.hasOwnProperty(index)) {
+                                    switch (elements[index].tagName) {
+                                        case "INPUT":
+                                            elements[index].value = this.value;
+                                            break;
+                                        default :
+                                            elements[index].innerHTML = this.value;
+                                            break;
+                                    }
+                              }
+                          }
+                          value = this.value;
+                        }
                     }
-                    value = this.value;
                 }
             }
             Object.defineProperty($scope, className, {
                 set: function (newValue) {
                     for (var index in elements) {
-                        elements[index].value = newValue;
+                        if(elements.hasOwnProperty(index)) {
+                            elements[index].value = newValue;
+                        }
                     }
                     value = newValue;
                 },
