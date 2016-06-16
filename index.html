@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>2 Way Data Binding in Plain Vanilla JavaScript by NamitaMalik</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">2 Way Data Binding in Plain Vanilla JavaScript</h1>
+      <h2 class="project-tagline">This repository explains how to do 2 way data binding in plain vanilla JavaScript.</h2>
+      <a href="https://github.com/NamitaMalik/2-way-data-binding-in-Plain-Vanilla-JavaScript" class="btn">View on GitHub</a>
+      <a href="https://github.com/NamitaMalik/2-way-data-binding-in-Plain-Vanilla-JavaScript/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/NamitaMalik/2-way-data-binding-in-Plain-Vanilla-JavaScript/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="2-way-data-binding-in-plain-vanilla-javascript" class="anchor" href="#2-way-data-binding-in-plain-vanilla-javascript" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2 Way Data Binding in Plain Vanilla JavaScript</h1>
+
+<p>Whenever someone asks me about the advantages of <strong>AngularJS</strong> the first thing that simply comes into my mind is <strong>2-way data binding</strong>.</p>
+
+<p>For those who still aren't aware about it, <strong>2-way data binding</strong> means when you change anything in your model, view gets updated and on changing anything in the view, model gets updated.</p>
+
+<p>Everyone who knows <strong>Angular</strong>(having worked on it) or in fact has worked upon any other <strong>JavaScript</strong> framework(missed working on it) would actually know the beauty of this feature.</p>
+
+<p>Well, now let's try to simply implement this feature in pur own plain vanilla <strong>JavaScript</strong>.</p>
+
+<p>Let us take 4 text boxes to easily demonstrate <strong>2-way data binding</strong>. Here is our small piece of <strong>HTML</strong> code:</p>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;!DOCTYPE html&gt;
+&lt;<span class="pl-ent">html</span>&gt;
+&lt;<span class="pl-ent">head</span> <span class="pl-e">lang</span>=<span class="pl-s"><span class="pl-pds">"</span>en<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">meta</span> <span class="pl-e">charset</span>=<span class="pl-s"><span class="pl-pds">"</span>UTF-8<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">title</span>&gt;2 Way Data Binding&lt;/<span class="pl-ent">title</span>&gt;
+&lt;/<span class="pl-ent">head</span>&gt;
+&lt;<span class="pl-ent">body</span>&gt;
+Name: &lt;<span class="pl-ent">input</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>text<span class="pl-pds">"</span></span>&gt;
+&lt;<span class="pl-ent">input</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>text<span class="pl-pds">"</span></span>&gt;
+&lt;<span class="pl-ent">hr</span> /&gt;
+Age: &lt;<span class="pl-ent">input</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>age<span class="pl-pds">"</span></span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>text<span class="pl-pds">"</span></span>&gt;
+&lt;<span class="pl-ent">input</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>age<span class="pl-pds">"</span></span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>text<span class="pl-pds">"</span></span>&gt;
+&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>2WayDataBinding.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
+&lt;/<span class="pl-ent">body</span>&gt;
+&lt;/<span class="pl-ent">html</span>&gt;</pre></div>
+
+<p>Now, let's have a look at our magical <strong>JavaScript</strong> code which will do wonders for us:</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> $scope <span class="pl-k">=</span> {};
+(<span class="pl-k">function</span> () {
+    <span class="pl-k">var</span> bindClasses <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>age<span class="pl-pds">"</span></span>];
+    <span class="pl-k">var</span> <span class="pl-en">attachEvent</span> <span class="pl-k">=</span> <span class="pl-k">function</span> (<span class="pl-smi">classNames</span>) {
+        <span class="pl-smi">classNames</span>.<span class="pl-en">forEach</span>(<span class="pl-k">function</span> (<span class="pl-smi">className</span>) {
+            <span class="pl-k">var</span> elements <span class="pl-k">=</span> <span class="pl-c1">document</span>.<span class="pl-en">getElementsByClassName</span>(className);
+            <span class="pl-k">for</span> (<span class="pl-k">var</span> index <span class="pl-k">in</span> elements) {
+                elements[index].<span class="pl-en">onkeyup</span> <span class="pl-k">=</span> <span class="pl-k">function</span> () {
+                    <span class="pl-k">for</span> (<span class="pl-k">var</span> index <span class="pl-k">in</span> elements) {
+                        elements[index].<span class="pl-c1">value</span> <span class="pl-k">=</span> <span class="pl-v">this</span>.<span class="pl-c1">value</span>;
+                    }
+                }
+            }
+            <span class="pl-c1">Object</span>.<span class="pl-en">defineProperty</span>($scope, className, {
+                <span class="pl-en">set</span><span class="pl-k">:</span> <span class="pl-k">function</span> (<span class="pl-smi">newValue</span>) {
+                    <span class="pl-k">for</span> (<span class="pl-k">var</span> index <span class="pl-k">in</span> elements) {
+                        elements[index].<span class="pl-c1">value</span> <span class="pl-k">=</span> newValue;
+                    }
+                }
+            });
+        });
+    };
+    <span class="pl-en">attachEvent</span>(bindClasses);
+})();</pre></div>
+
+<p>Here is a detailed explanation of the above snippet:</p>
+
+<ol>
+<li><p>We have taken the classes of the elements on which we need to apply <strong>2-way Data Binding</strong> in an array named <code>bindClasses</code>.</p></li>
+<li><p>Then we have an <code>attachEvent</code> which basically iterates through the classes passed in array <code>bindClasses</code>.</p></li>
+<li><p>We are extracting all the elements by using their class names <code>document.getElementsByClassName(className)</code>.</p></li>
+<li><p>Once the elements are extracted we are binding <code>onkeyup</code> event on it. When this event is triggered it calls a function which stores the current value inside the element.</p></li>
+</ol>
+
+<p>In this way we are successfully able to implement <strong>2-way Data Binding</strong> on our HTML.</p>
+
+<p>But how to update our <strong>model</strong>??</p>
+
+<p>Here is the explanation of the rest of the part of the code which actually updates the value in our model:</p>
+
+<ol>
+<li><p>We have used <code>object.defineProperty</code> to define a property of an object. Here our object is <strong>$scope</strong> and property is <strong>className</strong>.</p></li>
+<li><p>Then we have a <strong>set</strong> function which serves as <strong>setter</strong> of the property.</p></li>
+<li><p>So, if you do something like - <code>$scope.name="Hari"</code>, "Hari" would be passed as <code>newValue</code>, which would ultimately replace the value being displayed on the view through the following piece of code <code>elements[index].value = newValue</code>.</p></li>
+</ol>
+
+<p>Hurray!! We have now implemented the <strong>2-way Data Binding</strong> successfully.</p>
+
+<p>| Please note that this is just a small piece of code demonstrating <strong>2-way Data Binding</strong> using <strong>JavaScript</strong> this code can be improved a lot on the basis of element type.e We can also have a <strong>getter</strong> function for getting the value in <code>$scope.name</code>. But for the sake of simplicity I have deliberately avoided it.</p>
+
+<h2>
+<a id="follow-me" class="anchor" href="#follow-me" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Follow Me</h2>
+
+<p><a href="https://github.com/NamitaMalik">Github</a></p>
+
+<p><a href="https://twitter.com/namita13_04">Twitter</a></p>
+
+<p><a href="https://in.linkedin.com/in/namita-malik-a7885b23">LinkedIn</a></p>
+
+<p><a href="https://namitamalik.github.io/">More Blogs By Me</a></p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/NamitaMalik/2-way-data-binding-in-Plain-Vanilla-JavaScript">2 Way Data Binding in Plain Vanilla JavaScript</a> is maintained by <a href="https://github.com/NamitaMalik">NamitaMalik</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
