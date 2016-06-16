@@ -1,4 +1,4 @@
-# 2-way-data-binding-in-Plain-Vanilla-JavaScript
+# 2 Way Data Binding in Plain Vanilla JavaScript
 
 
 Whenever someone asks me about the advantages of **AngularJS** the first thing that simply comes into my mind is **2-way data binding**.
