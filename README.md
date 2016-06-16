@@ -82,4 +82,12 @@ Hurray!! We have now implemented the **2-way Data Binding** successfully.
 
 | Please note that this is just a small piece of code demonstrating **2-way Data Binding** using **JavaScript** this code can be improved a lot on the basis of element type.e We can also have a **getter** function for getting the value in ```$scope.name```. But for the sake of simplicity I have deliberately avoided it.
 
-You can checkout full working source code @ my github.
+Follow Me
+---
+[Github](https://github.com/NamitaMalik)
+
+[Twitter](https://twitter.com/namita13_04)
+
+[LinkedIn](https://in.linkedin.com/in/namita-malik-a7885b23)
+
+[More Blogs By Me](https://namitamalik.github.io/)
