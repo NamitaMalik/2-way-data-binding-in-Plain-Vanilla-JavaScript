@@ -1,0 +1,8 @@
+title: 2 Way Data Binding in Plain Vanilla JavaScript
+description: This repository explains how to do 2 way data binding in plain vanilla JavaScript.
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-hacker
+
+gems:
+  - jekyll-mentions
